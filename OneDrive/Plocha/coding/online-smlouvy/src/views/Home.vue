@@ -7,13 +7,27 @@ import { ScrollTrigger } from "gsap/all"
 import { onMounted, ref } from "vue"
 gsap.registerPlugin(ScrollTrigger)
 
-const video = ref(null)
-
 onMounted(() => {
-  gsap.from(video.value, {
-    delay: 3,
-    duration: 4,
-    autoAlpha: 0,
+  const path = document.querySelector("path")
+  const pathLength = path.getTotalLength()
+  const pathOffset =
+    (path.getBoundingClientRect().top + window.scrollY) /
+      document.body.getBoundingClientRect().height -
+    0.005
+
+  path.style.strokeDasharray = pathLength + " " + pathLength
+  path.style.strokeDashoffset = pathLength
+
+  window.addEventListener("scroll", () => {
+    const scrollPercentage =
+      ((document.documentElement.scrollTop + document.body.scrollTop) /
+        (document.documentElement.scrollHeight -
+          document.documentElement.clientHeight) -
+        pathOffset) *
+      (1 / pathOffset)
+
+    const drawLength = pathLength * scrollPercentage
+    path.style.strokeDashoffset = pathLength - drawLength
   })
 })
 
@@ -21,17 +35,17 @@ const infoContent = {
   first: {
     img: "/img/coffee.webp",
     heading: `Rychlejší a jednodušší`,
-    info: "Sagittis, molestie felis non justo etiam commodo amet. Sed et vitae eu, sit egestas a laoreet nullam. Dolor nisl adipiscing aliquam venenatis sociis. Vestibulum, dolor enim ut eget ultrices ullamcorper vulputate. Scelerisque luctus urna, est purus ac mattis sit. Ac a eu euismod mollis.",
+    info: "Svoji poptávku zadáte jednoduše elektronicky pomocí formuláře nebo emailu a my se s vámi obratem spojíme.",
   },
   second: {
     img: "/img/sofa.webp",
     heading: "Z pohodlí domova",
-    info: "Sagittis, molestie felis non justo etiam commodo amet. Sed et vitae eu, sit egestas a laoreet nullam. Dolor nisl adipiscing aliquam venenatis sociis. Vestibulum, dolor enim ut eget ultrices ullamcorper vulputate. Scelerisque luctus urna, est purus ac mattis sit. Ac a eu euismod mollis.",
+    info: "Vše si rozmyslíte a prostudujete v pohodlí domova.",
   },
   third: {
     img: "/img/expert.webp",
     heading: "Přes dvacet let praxe",
-    info: "Sagittis, molestie felis non justo etiam commodo amet. Sed et vitae eu, sit egestas a laoreet nullam. Dolor nisl adipiscing aliquam venenatis sociis. Vestibulum, dolor enim ut eget ultrices ullamcorper vulputate. Scelerisque luctus urna, est purus ac mattis sit. Ac a eu euismod mollis.",
+    info: "Advokátní kancelář s více  než dvacetiletou praxí se postará o to, aby vše proběhlo, jak má a k vaší maximální spokojenosti.",
   },
 }
 </script>
@@ -63,7 +77,7 @@ const infoContent = {
 }
 
 .h-section {
-  height: 90vh;
+  height: 80vh;
 }
 
 .h-info {

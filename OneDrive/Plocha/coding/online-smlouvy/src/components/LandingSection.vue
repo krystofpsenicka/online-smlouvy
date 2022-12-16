@@ -31,9 +31,10 @@ onMounted(() => {
           </h1>
         </div>
 
-        <p class="mt-4 w-3/4 whitespace-normal text-xl font-normal text-white">
-          All-in-one place for your remote team to chat, collaborate, and track
-          project progress
+        <p class="mt-4 w-4/5 whitespace-normal text-xl font-normal text-white">
+          Svěřte se do rukou profesionálů, kteří vám vypracují smlouvu podle
+          vašich potřeb a objevte tak kouzlo online smluv bez nutnosti osobní
+          schůzky.
         </p>
       </div>
       <div class="flex w-1/5">

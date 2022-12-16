@@ -17,13 +17,14 @@ const { heading } = props.content
 const { info } = props.content
 const { mirror } = props
 const { img } = props.content
-
-console.log(img)
 </script>
 
 <template>
-  <div class="mb-32 flex flex-1 px-32" :class="{ 'flex-row-reverse': mirror }">
-    <div class="z-20 mt-9 flex w-3/4 flex-auto items-center">
+  <div
+    class="mb-32 flex flex-1 justify-between px-32"
+    :class="{ 'flex-row-reverse': mirror }"
+  >
+    <div class="z-20 mt-9 flex w-1/12 flex-auto items-center">
       <img
         class="img-mask-toright mr-auto flex-auto object-cover"
         :class="!mirror ? 'img-mask-toright' : 'img-mask-toleft'"
@@ -32,8 +33,8 @@ console.log(img)
       />
     </div>
     <div
-      class="relative flex h-fit w-[45%] flex-auto flex-col justify-center"
-      :class="{ 'top-[2%] -left-[15%]': !mirror }"
+      class="relative flex h-fit flex-1 flex-col justify-center"
+      :class="{ 'top-[2%] -left-[4%] mr-32': !mirror }"
     >
       <Heading :text="heading" />
       <p class="mt-8 w-[122%] text-2xl font-normal leading-relaxed text-white">
