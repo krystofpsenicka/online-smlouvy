@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import LandingSection from "@/components/LandingSection.vue"
 import Info from "@/components/Info.vue"
 import Process from "@/components/Process.vue"
@@ -16,7 +16,7 @@ onMounted(() => {
     0.005
 
   path.style.strokeDasharray = pathLength + " " + pathLength
-  path.style.strokeDashoffset = pathLength
+  path.style.strokeDashoffset = pathLength.toString()
 
   window.addEventListener("scroll", () => {
     const scrollPercentage =
@@ -27,7 +27,8 @@ onMounted(() => {
       (1 / pathOffset)
 
     const drawLength = pathLength * scrollPercentage
-    path.style.strokeDashoffset = pathLength - drawLength
+    const drawOffset = pathLength - drawLength
+    path.style.strokeDashoffset = drawOffset.toString()
   })
 })
 
@@ -64,9 +65,9 @@ const infoContent = {
     </video>
 
     <LandingSection />
-    <Info class="h-section" :content="infoContent.first" />
+    <Info :mirror="false" class="h-section" :content="infoContent.first" />
     <Info class="h-section" mirror :content="infoContent.second" />
-    <Info class="h-section" :content="infoContent.third" />
+    <Info :mirror="false" class="h-section" :content="infoContent.third" />
     <Process />
   </div>
 </template>

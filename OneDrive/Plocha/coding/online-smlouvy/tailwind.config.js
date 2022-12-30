@@ -8,6 +8,7 @@ module.exports = {
       fontFamily: {
         sans: ['"Inter var"', ...defaultTheme.fontFamily.sans],
         "playfair-display": ["Playfair Display", "serif"],
+        "stardos-stencil": ["Stardos Stencil", "serif"],
       },
     },
   },

@@ -4,9 +4,7 @@ import Footer from "@/components/Footer.vue"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/all"
 import { onMounted, ref, reactive } from "vue"
-import LogRocket from "logrocket"
 gsap.registerPlugin(ScrollTrigger)
-LogRocket.init("omdozw/vr-team")
 
 const hidden = ref(true)
 
