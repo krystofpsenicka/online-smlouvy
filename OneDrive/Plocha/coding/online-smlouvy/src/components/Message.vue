@@ -17,7 +17,7 @@ const props = defineProps<MessageProps>()
     </div>
 
     <div
-      class="relative left-32 h-6 w-6 bg-gray-400 bg-opacity-40"
+      class="sh-6 relative left-32 w-6 bg-gray-400 bg-opacity-40"
       :class="'corner-' + corner_side"
     ></div>
 

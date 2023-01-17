@@ -1,24 +1,165 @@
 <script setup>
 import gsap from "gsap"
-import { ScrollTrigger } from "gsap/all"
 import { onMounted, ref } from "vue"
-gsap.registerPlugin(ScrollTrigger)
+import * as THREE from "three"
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader"
+import {
+  Clock,
+  AnimationClip,
+  VectorKeyframeTrack,
+  AnimationMixer,
+} from "three"
+
+import * as TWEEN from "@tweenjs/tween.js"
 
 const landingContent = ref(null)
+const canvas = ref(null)
 
 onMounted(() => {
   gsap.from(landingContent.value.children, {
     y: "+100",
-    delay: 0,
+    delay: 5,
     duration: 2,
     stagger: 0.25,
     autoAlpha: 0,
   })
+
+  const renderer = new THREE.WebGLRenderer({ antialiasing: true })
+  renderer.setPixelRatio(window.devicePixelRatio * 2)
+  renderer.setSize(window.innerWidth, window.innerHeight)
+  canvas.value.appendChild(renderer.domElement)
+
+  window.addEventListener("resize", () => {
+    camera.aspect = window.innerWidth / window.innerHeight
+    camera.updateProjectionMatrix()
+
+    renderer.setSize(window.innerWidth, window.innerHeight)
+  })
+
+  const camera = new THREE.PerspectiveCamera(
+    40,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    5000
+  )
+
+  camera.position.set(-0.7, 0.3, 2.5)
+  camera.lookAt(-0.7, 0.3, 0)
+
+  const scene = new THREE.Scene()
+
+  scene.background = null
+
+  const loader = new GLTFLoader()
+
+  const dracoLoader = new DRACOLoader()
+  dracoLoader.setDecoderPath("/examples/jsm/libs/draco/")
+  loader.setDRACOLoader(dracoLoader)
+
+  const d = 10
+  const light1 = new THREE.DirectionalLight(0xffffff, 0.9)
+  light1.position.set(-1, 0, 2)
+  light1.shadow.camera.left = -d
+  light1.shadow.camera.right = d
+  light1.shadow.camera.top = d
+  light1.shadow.camera.bottom = -d
+  light1.lookAt(-1, 0, 0)
+  light1.castShadow = true
+
+  scene.add(light1)
+
+  loader.load(
+    "/3dmodel/kupni_smlouva.gltf",
+    function (gltf) {
+      gltf.scene.children[1].position.set(-0.7, 0.1, 2.9)
+      gltf.scene.children[2].position.set(-0.7, 0.1, 3)
+      scene.add(gltf.scene)
+
+      gltf.animations // Array<THREE.AnimationClip>
+      gltf.scene // THREE.Group
+      gltf.scenes // Array<THREE.Group>
+      gltf.cameras // Array<THREE.Camera>
+      gltf.asset // Object
+
+      //make animations work
+      const animate = (t) => {
+        TWEEN.update(t)
+        window.requestAnimationFrame(animate)
+        renderer.render(scene, camera)
+      }
+      animate()
+
+      //init animation
+      const tween1 = new TWEEN.Tween({ z1: 3, z2: 2.9 })
+        .to({ z1: 0.2, z2: 0.1 }, 2000)
+        .onUpdate((c) => {
+          //page1
+          gltf.scene.children[2].position.z = c.z1
+          //page2
+          gltf.scene.children[1].position.z = c.z2
+        })
+        .easing(TWEEN.Easing.Exponential.InOut)
+        .delay(1500)
+
+      const tween2 = new TWEEN.Tween({
+        x1: -0.7,
+        x2: -0.7,
+        y1: 0.1,
+        y2: 0.1,
+        z2: 0.1,
+        z1: 0.2,
+        xRotation: 0,
+        zRotation: 0,
+        yRotation: 0,
+      })
+        .to(
+          {
+            x2: -0.4,
+            x1: 0.5,
+            y1: 0.4,
+            y2: 0.047,
+            z2: -0.98,
+            z1: -0.68,
+            xRotation: -Math.PI / 9,
+            zRotation: -Math.PI / 8,
+            yRotation: -Math.PI / 6,
+          },
+          2000
+        )
+        .onUpdate((c) => {
+          //page 1
+          gltf.scene.children[2].position.x = c.x1
+          gltf.scene.children[2].position.y = c.y1
+          gltf.scene.children[2].position.z = c.z1
+          gltf.scene.children[2].rotation.x = c.xRotation
+          gltf.scene.children[2].rotation.z = c.zRotation
+          gltf.scene.children[2].rotation.y = c.yRotation
+          //page2
+          gltf.scene.children[1].position.x = c.x2
+          gltf.scene.children[1].position.y = c.y2
+          gltf.scene.children[1].position.z = c.z2
+          gltf.scene.children[1].rotation.x = c.xRotation
+          gltf.scene.children[1].rotation.z = -c.zRotation
+          gltf.scene.children[1].rotation.y = -c.yRotation
+        })
+        .easing(TWEEN.Easing.Exponential.InOut)
+        .delay(500)
+
+      tween1.chain(tween2)
+      //start init animation
+      tween1.start()
+    },
+    undefined,
+    function (error) {
+      console.error(error)
+    }
+  )
 })
 </script>
 
 <template>
-  <div class="flex h-screen flex-col px-32">
+  <div class="flex h-screen flex-row px-32">
     <div class="mt-14 flex flex-1 flex-col justify-center" ref="landingContent">
       <div class="mb-20 w-2/5">
         <div
@@ -45,6 +186,7 @@ onMounted(() => {
         >
       </div>
     </div>
+    <div ref="canvas" class="absolute top-0 left-0 z-0"></div>
   </div>
 </template>
 

@@ -2,33 +2,34 @@
 import LandingSection from "@/components/LandingSection.vue"
 import Info from "@/components/Info.vue"
 import Process from "@/components/Process.vue"
-import gsap from "gsap"
-import { ScrollTrigger } from "gsap/all"
-import { onMounted, ref } from "vue"
-gsap.registerPlugin(ScrollTrigger)
+import { onMounted } from "vue"
 
 onMounted(() => {
-  const path = document.querySelector("path")
-  const pathLength = path.getTotalLength()
-  const pathOffset =
-    (path.getBoundingClientRect().top + window.scrollY) /
-      document.body.getBoundingClientRect().height -
-    0.005
+  const paths = document.querySelectorAll("path")
+  paths.forEach((path) => {
+    const pathLength = path.getTotalLength()
+    const pathOffset =
+      (path.getBoundingClientRect().top + window.scrollY) /
+        document.body.getBoundingClientRect().height -
+      0.005
 
-  path.style.strokeDasharray = pathLength + " " + pathLength
-  path.style.strokeDashoffset = pathLength.toString()
+    path.style.strokeDasharray = pathLength + " " + pathLength
+    path.style.strokeDashoffset = pathLength.toString()
 
-  window.addEventListener("scroll", () => {
-    const scrollPercentage =
-      ((document.documentElement.scrollTop + document.body.scrollTop) /
-        (document.documentElement.scrollHeight -
-          document.documentElement.clientHeight) -
-        pathOffset) *
-      (1 / pathOffset)
+    window.addEventListener("scroll", () => {
+      const scrollPercentage =
+        ((document.documentElement.scrollTop + document.body.scrollTop) /
+          (document.documentElement.scrollHeight -
+            document.documentElement.clientHeight) -
+          pathOffset) *
+        (1 / pathOffset)
 
-    const drawLength = pathLength * scrollPercentage
-    const drawOffset = pathLength - drawLength
-    path.style.strokeDashoffset = drawOffset.toString()
+      const drawLength =
+        pathLength * scrollPercentage * Number(path.dataset.speed)
+      const drawOffset = pathLength - Number(path.dataset.offset) - drawLength
+
+      path.style.strokeDashoffset = drawOffset.toString()
+    })
   })
 })
 
@@ -52,17 +53,8 @@ const infoContent = {
 </script>
 
 <template>
-  <div class="bg-radial relative overflow-hidden">
-    <video
-      ref="video"
-      id="AIanimation"
-      class="video absolute z-0"
-      autoplay
-      loop
-      muted
-    >
-      <source src="/video/VR-anim.mp4" type="video/mp4" />
-    </video>
+  <div class="relative overflow-hidden bg-black">
+    <div id="contract" class="video z-0"></div>
 
     <LandingSection />
     <Info :mirror="false" class="h-section" :content="infoContent.first" />
@@ -73,10 +65,6 @@ const infoContent = {
 </template>
 
 <style>
-.bg-radial {
-  background: radial-gradient(rgb(22, 22, 22), black);
-}
-
 .h-section {
   height: 80vh;
 }
@@ -86,8 +74,8 @@ const infoContent = {
 }
 
 .video {
-  width: 100%;
-  top: -7%;
-  left: 6%;
+  width: 50vw;
+  top: 0;
+  left: 0;
 }
 </style>

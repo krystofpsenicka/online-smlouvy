@@ -38,20 +38,17 @@ const processContent = {
 }
 </script>
 <template>
-  <div class="relative mx-32 overflow-hidden">
+  <div class="relative overflow-hidden px-[8vw]">
     <Heading :text="'Jak to funguje'" />
-    <svg1 class="svg-container z-0 mx-auto my-80 w-3/4 text-center" />
-    <div class="absolute top-0 z-20 mt-20 flex w-full flex-col">
+    <svg1 class="z-0 mx-auto my-80 w-3/4 text-center" />
+    <div class="absolute top-0 left-0 z-20 mt-20 flex w-full flex-col">
       <Step :n="'01'" :content="processContent[1]" />
-      <Step :n="'02'" :content="processContent[2]" />
-      <Step :n="'03'" :content="processContent[3]" />
-      <Step :n="'04'" :content="processContent[4]" />
-      <Step :n="'05'" :content="processContent[5]" />
-      <Step :n="'06'" :content="processContent[6]" />
+      <Step class="mt-[-7%]" :n="'02'" :content="processContent[2]" />
+      <Step class="" :n="'03'" :content="processContent[3]" />
+      <Step class="mt-[16%]" :n="'04'" :content="processContent[4]" />
+      <Step class="mt-[8%]" :n="'05'" :content="processContent[5]" />
+      <Step class="mt-[-4%]" :n="'06'" :content="processContent[6]" />
     </div>
-    <!-- <svg2
-      class="absolute left-0 right-0 z-20 mx-auto my-80 w-4/5 -translate-y-full"
-    /> -->
   </div>
 </template>
 <style>

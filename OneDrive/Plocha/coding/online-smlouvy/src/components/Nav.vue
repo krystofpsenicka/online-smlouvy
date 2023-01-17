@@ -36,7 +36,7 @@ const nav = ref(null)
 onMounted(() => {
   gsap.from(nav.value, {
     y: -100,
-    delay: 0,
+    delay: 4.6,
     duration: 2,
     autoAlpha: 0,
   })

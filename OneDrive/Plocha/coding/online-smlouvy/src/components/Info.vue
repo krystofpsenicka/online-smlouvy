@@ -21,7 +21,7 @@ const { img } = props.content
 
 <template>
   <div
-    class="mb-32 flex flex-1 justify-between px-32"
+    class="mb-32 flex flex-1 justify-between px-[8.5vw]"
     :class="{ 'flex-row-reverse': mirror }"
   >
     <div class="z-20 mt-9 flex w-1/12 flex-auto items-center">

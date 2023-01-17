@@ -3,7 +3,7 @@ import Nav from "@/components/Nav.vue"
 import Footer from "@/components/Footer.vue"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/all"
-import { onMounted, ref, reactive } from "vue"
+import { ref } from "vue"
 gsap.registerPlugin(ScrollTrigger)
 
 const hidden = ref(true)

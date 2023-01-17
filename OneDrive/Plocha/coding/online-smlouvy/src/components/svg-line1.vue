@@ -10,8 +10,8 @@
       stroke="url(#paint0_linear_309_215)"
       stroke-width="10"
       stroke-linecap="round"
-      stroke-dasharray="30 30"
-      class="path"
+      data-speed="1"
+      data-offset="0"
     />
 
     <defs>
