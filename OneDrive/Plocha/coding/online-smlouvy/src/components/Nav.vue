@@ -26,19 +26,20 @@
 </template>
 
 <script setup>
-import gsap from "gsap"
-import { ScrollTrigger } from "gsap/all"
 import { onMounted, ref } from "vue"
-gsap.registerPlugin(ScrollTrigger)
+import { anim } from "../dist"
 
 const nav = ref(null)
 
 onMounted(() => {
-  gsap.from(nav.value, {
-    y: -100,
-    delay: 4.6,
-    duration: 2,
-    autoAlpha: 0,
+  anim({
+    parent: nav.value,
+    duration: 4,
+    ease: "ease-in",
+    delay: 2,
+    change: {
+      transform: ["translateY(-100%)", "translateY(0%)"],
+    },
   })
 })
 </script>
