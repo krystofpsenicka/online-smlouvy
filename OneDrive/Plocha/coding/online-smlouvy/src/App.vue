@@ -1,25 +1,27 @@
 <script setup>
 import Nav from "@/components/Nav.vue"
 import Footer from "@/components/Footer.vue"
-import gsap from "gsap"
-import { ScrollTrigger } from "gsap/all"
-import { ref } from "vue"
-gsap.registerPlugin(ScrollTrigger)
+import { ref, onMounted } from "vue"
 
-const hidden = ref(true)
-
-window.onload = function () {
-  hidden.value = false
-}
+const page = ref(null)
+//avoid FOUC
+onMounted(() => {
+  page.value.style.opacity = 0
+  setTimeout(() => {
+    page.value.style.opacity = 1
+  }, 0)
+})
 </script>
 
 <template>
   <div class="bg-black">
-    <Nav />
-    <main>
-      <router-view />
-    </main>
-    <Footer class="bg-footer" />
+    <div ref="page">
+      <Nav />
+      <main>
+        <router-view />
+      </main>
+      <Footer class="bg-footer" />
+    </div>
   </div>
 </template>
 
