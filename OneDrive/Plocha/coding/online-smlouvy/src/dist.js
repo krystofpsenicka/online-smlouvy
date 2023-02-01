@@ -4,11 +4,14 @@ import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader"
 
 import * as TWEEN from "@tweenjs/tween.js"
 
+//3d model
 const threejsModel = (mouseEfContainer, canvas) => {
   //threejs
   const renderer = new THREE.WebGLRenderer({ antialiasing: true })
   renderer.setPixelRatio(window.devicePixelRatio * 2)
   renderer.setSize(window.innerWidth, window.innerHeight)
+  renderer.outputEncoding = THREE.sRGBEncoding
+  renderer.physicallyCorrectLights = true
   canvas.value.appendChild(renderer.domElement)
 
   window.addEventListener("resize", () => {
@@ -39,7 +42,7 @@ const threejsModel = (mouseEfContainer, canvas) => {
   loader.setDRACOLoader(dracoLoader)
 
   const d = 10
-  const light1 = new THREE.DirectionalLight(0xffffff, 0.9)
+  const light1 = new THREE.DirectionalLight(0xffffff, 2)
   light1.position.set(-1, 0, 2)
   light1.shadow.camera.left = -d
   light1.shadow.camera.right = d
@@ -168,13 +171,14 @@ const threejsModel = (mouseEfContainer, canvas) => {
   )
 }
 
+//universal animation function
 const anim = (options) => {
-  const { parent, duration, stagger, ease, delay, change } = options
+  let { parent, duration, stagger, ease, delay, change } = options
   const children = []
-  //populate children array
+  //populate children array based on existence of stagger
   if (stagger !== undefined) {
     Object.values(parent.children).forEach((child) => {
-      if (child.children[1] !== undefined) {
+      if (child.children[0] !== undefined) {
         Object.values(child.children).forEach((ch) => {
           children.push(ch)
         })
@@ -186,25 +190,219 @@ const anim = (options) => {
     children.push(parent)
   }
 
-  const singleDuration =
-    duration / children.length - stagger / (children.length - 1)
+  //make singleDuration conditional based on if there is only 1 child
+  let singleDuration
+  if (children.length === 1) {
+    singleDuration = duration
+    stagger = 0
+  } else {
+    singleDuration =
+      duration / children.length - stagger / (children.length - 1)
+  }
+
   children.forEach((child, i) => {
-    //move children away and make invisible
-    Object.entries(change).forEach(([key, value]) => {
-      child.style[key] = value[0]
-      child.style.transition += `${key} ${singleDuration}s ${ease} ${
-        stagger * i
-      }s`
+    const transition = []
+
+    Object.keys(change).forEach((key) => {
+      //set children styles to init styles
+      child.style[key] = change[key][0]
+      //populate transition array
+      transition.push(`${key} ${singleDuration}s ${ease} ${stagger * i}s`)
     })
+    //add transition to children
+    child.style.transition = transition.join(", ")
   })
+
   //animate
   setTimeout(() => {
     children.forEach((child) => {
-      Object.entries(change).forEach(([key, value]) => {
-        child.style[key] = value[1]
+      Object.keys(change).forEach((key) => {
+        child.style[key] = change[key][1]
       })
+      //remove transition after animation for future manipulation (eg. parallax)
+      child.addEventListener(
+        "transitionend",
+        (e) => {
+          child.style.transition = ""
+        },
+        false
+      )
     })
   }, delay * 1000)
 }
 
-export { threejsModel, anim }
+//lazyload
+const lazyLoad = (options) => {
+  const { element, margin, stagger } = options
+
+  //set children or parent el to init styles
+  if (stagger !== undefined) {
+    Object.values(element.children).forEach((child) => {
+      if (child.children[0] !== undefined) {
+        Object.values(child.children).forEach((ch) => {
+          ch.style.opacity = 0
+          ch.style.transform = "translateY(10%)"
+        })
+      } else {
+        child.style.opacity = 0
+        ch.style.transform = "translateY(10%)"
+      }
+    })
+  } else {
+    element.style.opacity = 0
+    element.style.transform = "translateY(10%)"
+  }
+
+  const settings = {
+    root: null,
+    rootMargin: margin,
+    threshold: 0.8,
+  }
+  let observed
+  let observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting === true) {
+        //lazyload only on first intersection
+        if (observed) {
+          observer.unobserve(element)
+        } else {
+          anim({
+            parent: element,
+            duration: 2,
+            stagger: 0.2,
+            ease: "cubic-bezier(0, 0.55, 0.45, 1)",
+            delay: 0,
+            change: {
+              transform: ["translateY(10%)", "translateY(0%)"],
+              opacity: [0, 1],
+            },
+          })
+        }
+        observed = true
+      }
+    })
+  }, settings)
+  observer.observe(element)
+}
+
+//lazyload and parallax effect
+const lazyLoadParallax = (options) => {
+  const { element, margin, stagger, parallax } = options
+
+  const children = []
+  //set children or parent el to init styles and populate children arr
+  if (stagger !== undefined) {
+    Object.values(element.children).forEach((child) => {
+      if (child.children[0] !== undefined) {
+        Object.values(child.children).forEach((ch) => {
+          children.push(ch)
+          ch.style.opacity = 0
+          ch.style.transform = "translateY(10%)"
+        })
+      } else {
+        child.style.opacity = 0
+        ch.style.transform = "translateY(10%)"
+        children.push(child)
+      }
+    })
+  } else {
+    element.style.opacity = 0
+    element.style.transform = "translateY(10%)"
+    children.push(element)
+  }
+
+  const settings = {
+    root: null,
+    rootMargin: margin,
+    threshold: 0.8,
+  }
+  //finished animation
+  let animfin
+  //lazyload anim after intersection
+  let observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting === true) {
+        //lazyload only on first intersection
+        if (animfin) {
+          observer.unobserve(element)
+        } else {
+          anim({
+            parent: element,
+            duration: 2,
+            stagger: 0.2,
+            ease: "cubic-bezier(0, 0.55, 0.45, 1)",
+            delay: 0,
+            change: {
+              transform: ["translateY(10%)", "translateY(0%)"],
+              opacity: [0, 1],
+            },
+          })
+        }
+        animfin = true
+      }
+    })
+  }, settings)
+
+  //multiple el parallax
+  window.addEventListener("scroll", (e) => {
+    //parallax after lazyload animation is done
+    if (animfin) {
+      const box = element.getBoundingClientRect()
+      const docEl = document.documentElement
+
+      const scrollTop = window.pageYOffset || docEl.scrollTop
+
+      const clientTop = docEl.clientTop || 0
+      //calculate top of element for offset
+      const top = box.top + scrollTop - clientTop
+
+      children.forEach((child, i) => {
+        const max = box.height / 10
+        const pos = (window.scrollY - top) * (i - 1) * parallax
+
+        //limit parallax to max
+        let finpos
+        if (pos > max) {
+          finpos = max
+        } else if (pos < -max) {
+          finpos = -max
+        } else if (pos > -max && pos < max) {
+          finpos = pos
+        }
+        child.style.transform = `translateY(${finpos}px)`
+        console.log(child.style.transform)
+      })
+    }
+  })
+
+  observer.observe(element)
+}
+
+//svg line anim
+const svgAnim = (path) => {
+  const pathLength = path.getTotalLength()
+  const pathOffset =
+    (path.getBoundingClientRect().top + window.scrollY) /
+      document.body.getBoundingClientRect().height -
+    0.005
+
+  path.style.strokeDasharray = pathLength + " " + pathLength
+  path.style.strokeDashoffset = pathLength.toString()
+
+  window.addEventListener("scroll", () => {
+    const scrollPercentage =
+      ((document.documentElement.scrollTop + document.body.scrollTop) /
+        (document.documentElement.scrollHeight -
+          document.documentElement.clientHeight) -
+        pathOffset) *
+      (1 / pathOffset)
+
+    const drawLength =
+      pathLength * scrollPercentage * Number(path.dataset.speed)
+    const drawOffset = pathLength - Number(path.dataset.offset) - drawLength
+
+    path.style.strokeDashoffset = drawOffset.toString()
+  })
+}
+
+export { threejsModel, anim, lazyLoad, lazyLoadParallax, svgAnim }

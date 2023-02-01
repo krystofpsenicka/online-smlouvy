@@ -11,11 +11,11 @@ onMounted(() => {
   anim({
     parent: landingContent.value,
     duration: 1.2,
-    stagger: 0.15,
+    stagger: 0.1,
     ease: "cubic-bezier(0, 0.55, 0.45, 1)",
     delay: 1.9,
     change: {
-      transform: ["translateY(500%)", "translateY(0%)"],
+      transform: ["translateY(400%)", "translateY(0%)"],
       opacity: [0, 1],
     },
   })
@@ -23,7 +23,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex h-screen flex-row px-32" ref="mouseEfContainer">
+  <div class="mb-[10%] flex h-screen flex-row px-32" ref="mouseEfContainer">
     <div class="mt-14 flex flex-1 flex-col justify-center" ref="landingContent">
       <div class="mb-20 w-2/5">
         <div

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import Heading from "@/components/Heading.vue"
+import { onMounted, ref } from "vue"
+import { lazyLoad, lazyLoadParallax } from "../dist"
 
 interface contentPrototype {
   heading: string
@@ -9,20 +11,30 @@ interface contentPrototype {
 interface propsPrototype {
   mirror: boolean
   content: contentPrototype
+  margin: string
 }
 
 const props = defineProps<propsPrototype>()
 
-const { heading } = props.content
-const { info } = props.content
-const { mirror } = props
-const { img } = props.content
+const { heading, info, img } = props.content
+const { mirror, margin } = props
+
+const element = ref(null)
+
+onMounted(() => {
+  lazyLoad({
+    element: element.value,
+    margin: margin,
+    stagger: 0.2,
+  })
+})
 </script>
 
 <template>
   <div
     class="mb-32 flex flex-1 justify-between px-[8.5vw]"
     :class="{ 'flex-row-reverse': mirror }"
+    ref="element"
   >
     <div class="z-20 mt-9 flex w-1/12 flex-auto items-center">
       <img

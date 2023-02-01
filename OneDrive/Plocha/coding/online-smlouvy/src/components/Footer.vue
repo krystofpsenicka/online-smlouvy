@@ -5,8 +5,7 @@
     <div class="flex w-full flex-row justify-between">
       <div>
         <div class="mb-5 flex flex-row items-center space-x-3">
-          <img src="/img/VRlogo.svg" alt="VR-logo" class="filter-white w-9" />
-          <h1 class="min-w-max text-lg font-bold text-white">VR Team</h1>
+          <img src="/img/SO-logo.svg" alt="VR-logo" class="w-36" />
         </div>
         <div class="min-w-max text-sm font-normal">
           Collaboration platform for<br />

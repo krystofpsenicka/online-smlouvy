@@ -1,3 +1,22 @@
+<script setup>
+import { onMounted, ref } from "vue"
+import { anim } from "../dist"
+
+const nav = ref(null)
+
+onMounted(() => {
+  anim({
+    parent: nav.value,
+    duration: 1.2,
+    ease: "cubic-bezier(0, 0.55, 0.45, 1)",
+    delay: 1.9,
+    change: {
+      transform: ["translateY(-100%)", "translateY(0%)"],
+    },
+  })
+})
+</script>
+
 <template>
   <nav
     ref="nav"
@@ -7,8 +26,7 @@
       to="/"
       class="flex flex-row items-center justify-between space-x-3"
     >
-      <img class="w-12" />
-      <h1 class="min-w-max text-2xl font-bold text-white">Smlouvy Online</h1>
+      <img class="mt-[3%] w-16" src="/img/SO-logo.svg" />
     </router-link>
     <div class="flex flex-row items-center space-x-12 font-bold text-white">
       <router-link to="/pricing" class="min-w-max">Ceník</router-link>
@@ -24,25 +42,6 @@
     </div>
   </nav>
 </template>
-
-<script setup>
-import { onMounted, ref } from "vue"
-import { anim } from "../dist"
-
-const nav = ref(null)
-
-onMounted(() => {
-  anim({
-    parent: nav.value,
-    duration: 4,
-    ease: "ease-in",
-    delay: 2,
-    change: {
-      transform: ["translateY(-100%)", "translateY(0%)"],
-    },
-  })
-})
-</script>
 
 <style scoped>
 .bg-gradient-txt-clip {
