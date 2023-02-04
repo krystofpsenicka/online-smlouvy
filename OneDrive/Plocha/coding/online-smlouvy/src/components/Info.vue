@@ -11,20 +11,19 @@ interface contentPrototype {
 interface propsPrototype {
   mirror: boolean
   content: contentPrototype
-  margin: string
 }
 
 const props = defineProps<propsPrototype>()
 
 const { heading, info, img } = props.content
-const { mirror, margin } = props
+const { mirror } = props
 
 const element = ref(null)
 
 onMounted(() => {
   lazyLoad({
     element: element.value,
-    margin: margin,
+    margin: "20%",
     stagger: 0.2,
   })
 })
@@ -37,12 +36,16 @@ onMounted(() => {
     ref="element"
   >
     <div class="z-20 mt-9 flex w-1/12 flex-auto items-center">
-      <img
-        class="img-mask-toright mr-auto flex-auto object-cover"
-        :class="!mirror ? 'img-mask-toright' : 'img-mask-toleft'"
-        :src="img"
-        alt="VR-Team-user"
-      />
+      <picture>
+        <source type="image/webp" :srcset="img + '.webp'" />
+
+        <img
+          class="img-mask-toright mr-auto flex-auto object-cover"
+          :class="!mirror ? 'img-mask-toright' : 'img-mask-toleft'"
+          :src="img + '.jpg'"
+          alt="VR-Team-user"
+        />
+      </picture>
     </div>
     <div
       class="relative flex h-fit flex-1 flex-col justify-center"

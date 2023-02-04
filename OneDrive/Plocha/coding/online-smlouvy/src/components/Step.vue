@@ -37,11 +37,14 @@ onMounted(() => {
         {{ n }}
       </h1>
 
-      <img
-        :src="pic"
-        :alt="pic"
-        class="col-span-1 col-start-1 row-span-1 row-start-1 my-auto object-cover px-[10%] pb-[10%]"
-      />
+      <picture class="col-span-1 col-start-1 row-span-1 row-start-1">
+        <source type="image/webp" :srcset="pic + '.webp'" />
+        <img
+          :src="pic + '.png'"
+          :alt="pic"
+          class="col-span-1 col-start-1 row-span-1 row-start-1 my-auto object-cover px-[10%] pb-[10%]"
+        />
+      </picture>
     </div>
     <div
       class="mb-[15%] flex w-[50%] items-center pr-[3%] text-[1.5vw] text-white"

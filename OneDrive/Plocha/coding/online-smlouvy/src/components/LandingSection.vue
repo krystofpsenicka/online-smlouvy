@@ -23,7 +23,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="mb-[10%] flex h-screen flex-row px-32" ref="mouseEfContainer">
+  <div
+    class="mb-[10%] flex h-screen flex-row px-[8.4vw]"
+    ref="mouseEfContainer"
+  >
     <div class="mt-14 flex flex-1 flex-col justify-center" ref="landingContent">
       <div class="mb-20 w-2/5">
         <div

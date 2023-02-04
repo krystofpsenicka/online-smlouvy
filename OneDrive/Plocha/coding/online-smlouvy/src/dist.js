@@ -14,22 +14,19 @@ const threejsModel = (mouseEfContainer, canvas) => {
   renderer.physicallyCorrectLights = true
   canvas.value.appendChild(renderer.domElement)
 
-  window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / window.innerHeight
-    camera.updateProjectionMatrix()
-
-    renderer.setSize(window.innerWidth, window.innerHeight)
-  })
-
   const camera = new THREE.PerspectiveCamera(
     40,
     window.innerWidth / window.innerHeight,
     0.1,
     5000
   )
-
-  camera.position.set(-0.7, 0.3, 2.5)
-  camera.lookAt(-0.7, 0.3, 0)
+  if (window.innerWidth / window.innerHeight < 1200 / 670) {
+    camera.position.set(0, 0.3, 2.5)
+    camera.lookAt(0, 0.3, 0)
+  } else {
+    camera.position.set(-0.7, 0.3, 2.5)
+    camera.lookAt(-0.7, 0.3, 0)
+  }
 
   const scene = new THREE.Scene()
 
@@ -60,6 +57,11 @@ const threejsModel = (mouseEfContainer, canvas) => {
       gltf.scene.children[2].position.set(-0.7, 0.1, 3)
       gltf.scene.children[2].receiveShadow = true
       gltf.scene.children[1].receiveShadow = true
+      if (window.innerWidth < 1000) {
+        gltf.scene.scale.set(0.7, 0.7, 0.7)
+      } else {
+        gltf.scene.scale.set(1, 1, 1)
+      }
       scene.add(gltf.scene)
 
       gltf.animations // Array<THREE.AnimationClip>
@@ -163,6 +165,29 @@ const threejsModel = (mouseEfContainer, canvas) => {
           gltf.scene.children[2].rotation.y = page1InitRot.y
         })
       }, 2000)
+      window.addEventListener("resize", () => {
+        camera.aspect = window.innerWidth / window.innerHeight
+        camera.updateProjectionMatrix()
+
+        renderer.setSize(window.innerWidth, window.innerHeight)
+
+        if (window.innerWidth / window.innerHeight < 1200 / 670) {
+          camera.position.set(0, 0.3, 2.5)
+          camera.lookAt(0, 0.3, 0)
+        } else {
+          camera.position.set(-0.7, 0.3, 2.5)
+          camera.lookAt(-0.7, 0.3, 0)
+        }
+        if (window.innerWidth < 1000) {
+          gltf.scene.scale.set(
+            window.innerWidth / 900,
+            window.innerWidth / 900,
+            window.innerWidth / 900
+          )
+        } else {
+          gltf.scene.scale.set(1, 1, 1)
+        }
+      })
     },
     undefined,
     function (error) {
@@ -241,16 +266,16 @@ const lazyLoad = (options) => {
       if (child.children[0] !== undefined) {
         Object.values(child.children).forEach((ch) => {
           ch.style.opacity = 0
-          ch.style.transform = "translateY(10%)"
+          ch.style.transform = "translateY(20%)"
         })
       } else {
         child.style.opacity = 0
-        ch.style.transform = "translateY(10%)"
+        ch.style.transform = "translateY(20%)"
       }
     })
   } else {
     element.style.opacity = 0
-    element.style.transform = "translateY(10%)"
+    element.style.transform = "translateY(20%)"
   }
 
   const settings = {
@@ -273,7 +298,7 @@ const lazyLoad = (options) => {
             ease: "cubic-bezier(0, 0.55, 0.45, 1)",
             delay: 0,
             change: {
-              transform: ["translateY(10%)", "translateY(0%)"],
+              transform: ["translateY(20%)", "translateY(0%)"],
               opacity: [0, 1],
             },
           })
@@ -297,17 +322,17 @@ const lazyLoadParallax = (options) => {
         Object.values(child.children).forEach((ch) => {
           children.push(ch)
           ch.style.opacity = 0
-          ch.style.transform = "translateY(10%)"
+          ch.style.transform = "translateY(20%)"
         })
       } else {
         child.style.opacity = 0
-        ch.style.transform = "translateY(10%)"
+        ch.style.transform = "translateY(20%)"
         children.push(child)
       }
     })
   } else {
     element.style.opacity = 0
-    element.style.transform = "translateY(10%)"
+    element.style.transform = "translateY(20%)"
     children.push(element)
   }
 
@@ -333,7 +358,7 @@ const lazyLoadParallax = (options) => {
             ease: "cubic-bezier(0, 0.55, 0.45, 1)",
             delay: 0,
             change: {
-              transform: ["translateY(10%)", "translateY(0%)"],
+              transform: ["translateY(20%)", "translateY(0%)"],
               opacity: [0, 1],
             },
           })
