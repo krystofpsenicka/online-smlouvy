@@ -41,7 +41,7 @@ onMounted(() => {
         </div>
 
         <p
-          class="mt-4 w-4/5 whitespace-normal text-center text-xl font-normal text-white lg:text-left"
+          class="mt-4 whitespace-normal text-center text-xl font-normal text-white md:w-4/5 lg:text-left"
         >
           Svěřte se do rukou profesionálů, kteří vám vypracují smlouvu podle
           vašich potřeb a objevte tak kouzlo online smluv bez nutnosti osobní

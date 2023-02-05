@@ -21,9 +21,13 @@ const { mirror } = props
 const element = ref(null)
 
 onMounted(() => {
+  let margin = "20%"
+  if (window.innerWidth < 1200 && window.innerWidth > 900) {
+    margin = "30%"
+  }
   lazyLoad({
     element: element.value,
-    margin: "20%",
+    margin: margin,
     stagger: 0.2,
   })
 })
@@ -31,12 +35,12 @@ onMounted(() => {
 
 <template>
   <div
-    class="xl:h-section grid h-fit flex-1 items-center px-[8.5vw] text-center xl:mb-32 xl:flex xl:items-stretch xl:justify-between xl:text-left"
+    class="xl:h-section mb-[10vw] grid h-fit flex-1 items-center px-[8.5vw] text-center xl:mb-32 xl:flex xl:items-stretch xl:justify-between xl:text-left"
     :class="{ 'xl:flex-row-reverse': mirror }"
     ref="element"
   >
     <div
-      class="z-20 col-span-1 col-start-1 row-span-1 row-start-1 mx-auto mb-[3vw] flex w-4/5 flex-auto items-center xl:mx-0 xl:mt-9 xl:mb-0 xl:w-1/12"
+      class="z-20 col-span-1 col-start-1 row-span-1 row-start-1 mx-auto mb-[1vw] flex flex-auto items-center md:mb-[3vw] xl:mx-0 xl:mt-9 xl:mb-0 xl:w-1/12"
     >
       <picture>
         <source type="image/webp" :srcset="img + '.webp'" />
@@ -50,12 +54,12 @@ onMounted(() => {
       </picture>
     </div>
     <div
-      class="col-span-1 col-start-1 row-span-1 row-start-1 flex h-full flex-1 flex-col items-center justify-center bg-black/60 px-[10vw] backdrop-blur-[2px] xl:h-fit xl:w-auto xl:items-start xl:bg-transparent xl:px-0 xl:backdrop-blur-none"
+      class="col-span-1 col-start-1 row-span-1 row-start-1 flex h-full flex-1 flex-col items-center justify-center bg-gradient-to-b from-black/60 via-black/60 to-black px-[10vw] backdrop-blur-[2px] xl:h-fit xl:w-auto xl:items-start xl:bg-transparent xl:px-0 xl:backdrop-blur-none"
       :class="{ 'xl:top-[2%] xl:-left-[4%] xl:mr-32': !mirror }"
     >
       <Heading :text="heading" class="flex justify-center" />
       <p
-        class="mt-8 px-[2vw] text-2xl font-normal leading-relaxed text-white xl:w-[122%] xl:px-0"
+        class="mt-4 px-[2vw] font-normal leading-snug text-white md:mt-8 md:text-[2.34vw] lg:text-2xl xl:w-[122%] xl:px-0"
       >
         {{ info }}
       </p>

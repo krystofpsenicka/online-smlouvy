@@ -2,6 +2,8 @@
 import Heading from "@/components/Heading.vue"
 import svg1 from "@/components/svg-line1.vue"
 import Step from "@/components/Step.vue"
+import { onMounted, ref } from "vue"
+import { lazyLoad } from "@/dist"
 
 const processContent = {
   1: {
@@ -48,12 +50,28 @@ const processContent = {
     reverse: "",
   },
 }
+
+const heading = ref(null)
+onMounted(() => {
+  console.log(heading.value)
+  lazyLoad({
+    element: heading.value,
+    margin: "10%",
+    stagger: 0,
+  })
+})
 </script>
 <template>
-  <div class="relative h-fit px-[8vw]">
-    <Heading :text="'Jak to funguje'" />
-    <svg1 class="z-0 mx-auto my-80 w-3/4 text-center" />
-    <div class="absolute top-0 left-0 z-20 mt-20 flex w-full flex-col">
+  <div
+    class="relative flex h-fit flex-col items-center justify-center px-[8vw]"
+  >
+    <div ref="heading">
+      <Heading :text="'Jak to funguje'" />
+    </div>
+    <svg1 class="z-0 mx-auto my-80 hidden w-3/4 text-center xl:block" />
+    <div
+      class="static top-0 left-0 z-20 mt-20 flex w-full flex-col xl:absolute"
+    >
       <Step :n="'01'" :content="processContent[1]" :margin="'20%'" />
       <Step
         class="mt-[-7%]"

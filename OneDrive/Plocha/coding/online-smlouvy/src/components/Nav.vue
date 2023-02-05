@@ -81,7 +81,7 @@ onMounted(() => {
         <CrossSvg />
       </button>
       <ul
-        class="mb-7 ml-7 mt-5 mr-7 flex w-full flex-col items-start justify-around text-lg font-bold text-slate-400"
+        class="mb-7 ml-7 mt-5 mr-7 flex w-full flex-col items-start justify-around font-bold text-slate-400 md:text-lg"
       >
         <div class="flex flex-col items-start justify-between">
           <router-link
