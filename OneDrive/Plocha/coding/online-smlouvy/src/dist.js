@@ -12,7 +12,7 @@ const threejsModel = (mouseEfContainer, canvas) => {
   renderer.setSize(window.innerWidth, window.innerHeight)
   renderer.outputEncoding = THREE.sRGBEncoding
   renderer.physicallyCorrectLights = true
-  canvas.value.appendChild(renderer.domElement)
+  canvas.appendChild(renderer.domElement)
 
   const camera = new THREE.PerspectiveCamera(
     40,
@@ -20,9 +20,21 @@ const threejsModel = (mouseEfContainer, canvas) => {
     0.1,
     5000
   )
-  if (window.innerWidth / window.innerHeight < 1200 / 670) {
-    camera.position.set(0, 0.3, 2.5)
-    camera.lookAt(0, 0.3, 0)
+
+  const tabletInitCamXPos = 0.07
+
+  if (
+    window.innerWidth / window.innerHeight < 1200 / 670 &&
+    window.innerWidth >= 1024
+  ) {
+    camera.position.set(-0.5, 0.3, 2.5)
+    camera.lookAt(-0.5, 0.3, 0)
+  } else if (window.innerWidth < 1024 && window.innerWidth >= 490) {
+    camera.position.set(tabletInitCamXPos, 0.3, 2.5)
+    camera.lookAt(tabletInitCamXPos, 0.3, 0)
+  } else if (window.innerWidth < 490) {
+    camera.position.set(0.03, 0.3, 2.5)
+    camera.lookAt(0.03, 0.3, 0)
   } else {
     camera.position.set(-0.7, 0.3, 2.5)
     camera.lookAt(-0.7, 0.3, 0)
@@ -55,10 +67,27 @@ const threejsModel = (mouseEfContainer, canvas) => {
     function (gltf) {
       gltf.scene.children[1].position.set(-0.7, 0.1, 2.9)
       gltf.scene.children[2].position.set(-0.7, 0.1, 3)
+      //model init position in center unless big screen
+      if (window.innerWidth < 1024) {
+        gltf.scene.children[1].position.set(tabletInitCamXPos, 0.1, 2.9)
+        gltf.scene.children[2].position.set(tabletInitCamXPos, 0.1, 3)
+      }
       gltf.scene.children[2].receiveShadow = true
       gltf.scene.children[1].receiveShadow = true
-      if (window.innerWidth < 1000) {
+
+      //responsive scene size
+      if (window.innerWidth < 800 && window.innerWidth >= 700) {
+        gltf.scene.scale.set(0.9, 0.9, 0.9)
+      } else if (window.innerWidth < 700 && window.innerWidth >= 640) {
+        gltf.scene.scale.set(0.85, 0.85, 0.85)
+      } else if (window.innerWidth < 640 && window.innerWidth >= 550) {
         gltf.scene.scale.set(0.7, 0.7, 0.7)
+      } else if (window.innerWidth < 550 && window.innerWidth >= 490) {
+        gltf.scene.scale.set(0.6, 0.6, 0.6)
+      } else if (window.innerWidth < 490 && window.innerWidth >= 420) {
+        gltf.scene.scale.set(0.5, 0.5, 0.5)
+      } else if (window.innerWidth < 420) {
+        gltf.scene.scale.set(0.35, 0.35, 0.35)
       } else {
         gltf.scene.scale.set(1, 1, 1)
       }
@@ -89,10 +118,14 @@ const threejsModel = (mouseEfContainer, canvas) => {
         })
         .easing(TWEEN.Easing.Exponential.InOut)
         .delay(0)
-
+      //make anim responsive (start from center)
+      let [x1, x2] = [-0.7, -0.7]
+      if (window.innerWidth < 1024) {
+        ;[x1, x2] = [tabletInitCamXPos, tabletInitCamXPos]
+      }
       const tween2 = new TWEEN.Tween({
-        x1: -0.7,
-        x2: -0.7,
+        x1: x1,
+        x2: x2,
         y1: 0.1,
         y2: 0.1,
         z2: 0.1,
@@ -147,43 +180,63 @@ const threejsModel = (mouseEfContainer, canvas) => {
         x: -0.3490658503988659,
         y: 0.5235987755982988,
       }
-      setTimeout(() => {
-        mouseEfContainer.value.addEventListener("mousemove", (e) => {
-          let xAxis = (window.innerWidth / 2 - e.pageX) / 9500
-          let yAxis = (window.innerHeight / 2 - e.pageY) / 8000
-          //page1
-          gltf.scene.children[2].rotation.x = page1InitRot.x - yAxis
-          gltf.scene.children[2].rotation.y = page1InitRot.y - xAxis
-          //page2
-          gltf.scene.children[1].rotation.x = page2InitRot.x - yAxis
-          gltf.scene.children[1].rotation.y = page2InitRot.y - xAxis
-        })
-        mouseEfContainer.value.addEventListener("mouseout", (e) => {
-          gltf.scene.children[1].rotation.x = page2InitRot.x
-          gltf.scene.children[1].rotation.y = page2InitRot.y
-          gltf.scene.children[2].rotation.y = page1InitRot.y
-          gltf.scene.children[2].rotation.y = page1InitRot.y
-        })
-      }, 2000)
+      if (window.innerWidth > 1024) {
+        setTimeout(() => {
+          mouseEfContainer.value.addEventListener("mousemove", (e) => {
+            let xAxis = (window.innerWidth / 2 - e.pageX) / 9500
+            let yAxis = (window.innerHeight / 2 - e.pageY) / 8000
+            //page1
+            gltf.scene.children[2].rotation.x = page1InitRot.x - yAxis
+            gltf.scene.children[2].rotation.y = page1InitRot.y - xAxis
+            //page2
+            gltf.scene.children[1].rotation.x = page2InitRot.x - yAxis
+            gltf.scene.children[1].rotation.y = page2InitRot.y - xAxis
+          })
+          mouseEfContainer.value.addEventListener("mouseout", (e) => {
+            gltf.scene.children[1].rotation.x = page2InitRot.x
+            gltf.scene.children[1].rotation.y = page2InitRot.y
+            gltf.scene.children[2].rotation.y = page1InitRot.y
+            gltf.scene.children[2].rotation.y = page1InitRot.y
+          })
+        }, 2000)
+      }
+
+      //make model responsive
       window.addEventListener("resize", () => {
+        renderer.setSize(window.innerWidth, window.innerHeight)
         camera.aspect = window.innerWidth / window.innerHeight
         camera.updateProjectionMatrix()
 
-        renderer.setSize(window.innerWidth, window.innerHeight)
-
-        if (window.innerWidth / window.innerHeight < 1200 / 670) {
-          camera.position.set(0, 0.3, 2.5)
-          camera.lookAt(0, 0.3, 0)
+        //responsive cam position
+        if (
+          window.innerWidth / window.innerHeight < 1200 / 670 &&
+          window.innerWidth >= 1024
+        ) {
+          camera.position.set(-0.5, 0.3, 2.5)
+          camera.lookAt(-0.5, 0.3, 0)
+        } else if (window.innerWidth < 1024 && window.innerWidth >= 490) {
+          camera.position.set(tabletInitCamXPos, 0.3, 2.5)
+          camera.lookAt(tabletInitCamXPos, 0.3, 0)
+        } else if (window.innerWidth < 490) {
+          camera.position.set(0.03, 0.3, 2.5)
+          camera.lookAt(0.03, 0.3, 0)
         } else {
           camera.position.set(-0.7, 0.3, 2.5)
           camera.lookAt(-0.7, 0.3, 0)
         }
-        if (window.innerWidth < 1000) {
-          gltf.scene.scale.set(
-            window.innerWidth / 900,
-            window.innerWidth / 900,
-            window.innerWidth / 900
-          )
+        //responsive scene size
+        if (window.innerWidth < 800 && window.innerWidth >= 700) {
+          gltf.scene.scale.set(0.9, 0.9, 0.9)
+        } else if (window.innerWidth < 700 && window.innerWidth >= 640) {
+          gltf.scene.scale.set(0.85, 0.85, 0.85)
+        } else if (window.innerWidth < 640 && window.innerWidth >= 550) {
+          gltf.scene.scale.set(0.7, 0.7, 0.7)
+        } else if (window.innerWidth < 550 && window.innerWidth >= 490) {
+          gltf.scene.scale.set(0.6, 0.6, 0.6)
+        } else if (window.innerWidth < 490 && window.innerWidth >= 420) {
+          gltf.scene.scale.set(0.5, 0.5, 0.5)
+        } else if (window.innerWidth < 420) {
+          gltf.scene.scale.set(0.35, 0.35, 0.35)
         } else {
           gltf.scene.scale.set(1, 1, 1)
         }

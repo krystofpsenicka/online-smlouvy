@@ -2,7 +2,6 @@
 import Nav from "@/components/Nav.vue"
 import Footer from "@/components/Footer.vue"
 import { ref, onMounted } from "vue"
-import LocomotiveScroll from "locomotive-scroll"
 
 const page = ref(null)
 const app = ref(null)
@@ -12,10 +11,6 @@ onMounted(() => {
   setTimeout(() => {
     page.value.style.opacity = 1
   }, 0)
-  // const scroll = new LocomotiveScroll({
-  //   el: app.value,
-  //   smooth: true,
-  // })
 })
 </script>
 

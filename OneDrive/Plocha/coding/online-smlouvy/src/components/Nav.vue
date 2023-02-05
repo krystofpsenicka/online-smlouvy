@@ -72,7 +72,7 @@ onMounted(() => {
     class="fixed z-40 flex h-[100vh] w-[100vw] justify-end bg-black/20 backdrop-blur-md md:hidden lg:hidden"
   >
     <div
-      class="m-[4vw] flex h-fit w-[70vw] items-center justify-start rounded-xl bg-slate-800"
+      class="m-[4vw] flex h-fit w-[50vw] items-center justify-start rounded-xl bg-slate-900"
     >
       <button
         class="absolute top-10 right-10 z-30 flex h-[6vw] w-[6vw] items-center justify-center text-slate-400 hover:text-blue-500"
@@ -107,7 +107,7 @@ onMounted(() => {
         <div class="mt-[2vw] flex">
           <router-link
             to="/access"
-            class="btn-background block rounded-md px-[3vw] py-[2vw] text-slate-800"
+            class="btn-background block rounded-md px-[2vw] py-[1vw] text-slate-800"
             @click="toggleShowNav"
             >Poptat Smlouvu</router-link
           >
