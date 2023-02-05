@@ -28,7 +28,7 @@ onMounted(() => {
     ref="mouseEfContainer"
   >
     <div
-      class="flex flex-1 flex-col items-center justify-center bg-black/60 px-[8.4vw] backdrop-blur-[2px] lg:mt-36 lg:items-start lg:bg-transparent lg:backdrop-blur-none"
+      class="flex flex-1 flex-col items-center justify-center bg-black/70 px-[8.4vw] backdrop-blur-[2px] lg:mt-36 lg:items-start lg:bg-transparent lg:backdrop-blur-none"
       ref="landingContent"
     >
       <div class="mb-20 flex flex-col items-center lg:w-2/5 lg:items-start">

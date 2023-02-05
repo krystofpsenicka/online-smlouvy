@@ -9,9 +9,7 @@ const { text } = props
 </script>
 
 <template>
-  <div
-    class="flex w-fit flex-auto content-center items-center text-5xl font-extrabold"
-  >
+  <div class="flex w-fit content-center items-center text-5xl font-extrabold">
     <h1
       class="text-gradient w-fit flex-auto font-playfair-display leading-tight"
     >

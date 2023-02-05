@@ -32,9 +32,9 @@ const infoContent = [
 <template>
   <div class="relative overflow-hidden bg-black">
     <LandingSection />
-    <Info :mirror="false" class="h-section" :content="infoContent[0]" />
-    <Info class="h-section" mirror :content="infoContent[1]" />
-    <Info :mirror="false" class="h-section" :content="infoContent[2]" />
+    <Info :mirror="false" :content="infoContent[0]" />
+    <Info mirror :content="infoContent[1]" />
+    <Info :mirror="false" :content="infoContent[2]" />
     <Process />
   </div>
 </template>

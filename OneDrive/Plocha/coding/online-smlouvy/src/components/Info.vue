@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Heading from "@/components/Heading.vue"
 import { onMounted, ref } from "vue"
-import { lazyLoad, lazyLoadParallax } from "../dist"
+import { lazyLoad } from "../dist"
 
 interface contentPrototype {
   heading: string
@@ -31,11 +31,13 @@ onMounted(() => {
 
 <template>
   <div
-    class="mb-32 flex flex-1 justify-between px-[8.5vw]"
-    :class="{ 'flex-row-reverse': mirror }"
+    class="xl:h-section grid h-fit flex-1 items-center px-[8.5vw] text-center xl:mb-32 xl:flex xl:items-stretch xl:justify-between xl:text-left"
+    :class="{ 'xl:flex-row-reverse': mirror }"
     ref="element"
   >
-    <div class="z-20 mt-9 flex w-1/12 flex-auto items-center">
+    <div
+      class="z-20 col-span-1 col-start-1 row-span-1 row-start-1 mx-auto mb-[3vw] flex w-4/5 flex-auto items-center xl:mx-0 xl:mt-9 xl:mb-0 xl:w-1/12"
+    >
       <picture>
         <source type="image/webp" :srcset="img + '.webp'" />
 
@@ -48,11 +50,13 @@ onMounted(() => {
       </picture>
     </div>
     <div
-      class="relative flex h-fit flex-1 flex-col justify-center"
-      :class="{ 'top-[2%] -left-[4%] mr-32': !mirror }"
+      class="col-span-1 col-start-1 row-span-1 row-start-1 flex h-full flex-1 flex-col items-center justify-center bg-black/60 px-[10vw] backdrop-blur-[2px] xl:h-fit xl:w-auto xl:items-start xl:bg-transparent xl:px-0 xl:backdrop-blur-none"
+      :class="{ 'xl:top-[2%] xl:-left-[4%] xl:mr-32': !mirror }"
     >
-      <Heading :text="heading" />
-      <p class="mt-8 w-[122%] text-2xl font-normal leading-relaxed text-white">
+      <Heading :text="heading" class="flex justify-center" />
+      <p
+        class="mt-8 px-[2vw] text-2xl font-normal leading-relaxed text-white xl:w-[122%] xl:px-0"
+      >
         {{ info }}
       </p>
     </div>
@@ -84,5 +88,29 @@ onMounted(() => {
     rgba(0, 0, 0, 0)
   );
   mask-image: linear-gradient(to left, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+}
+@media (max-width: 1280px) {
+  .img-mask-toright,
+  .img-mask-toleft {
+    -webkit-mask-image: -webkit-gradient(
+      linear,
+      right,
+      center,
+      left,
+      rgba(0, 0, 0, 0),
+      10%,
+      rgba(0, 0, 0, 1),
+      90%,
+      rgba(0, 0, 0, 0)
+    );
+    mask-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0),
+      10%,
+      rgba(0, 0, 0, 1),
+      90%,
+      rgba(0, 0, 0, 0)
+    );
+  }
 }
 </style>
